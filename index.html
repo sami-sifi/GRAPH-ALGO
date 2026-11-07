@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Graph Algorithm Tracker</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://unpkg.com/cytoscape@3.30.4/dist/cytoscape.min.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Interactive Graph Algorithm Tracker</h1>
+    <p>Choose an algorithm, enter a graph, and follow its execution step by step.</p>
+  </header>
+
+  <main id="container">
+    <section class="control-panel" aria-labelledby="config-title">
+      <h2 id="config-title">Configuration</h2>
+
+      <label for="algo-select">Algorithm</label>
+      <select id="algo-select">
+        <option value="dijkstra">Dijkstra</option>
+        <option value="bellman_ford">Bellman-Ford</option>
+        <option value="dfs">Depth-First Search (DFS)</option>
+      </select>
+
+      <label for="start-node">Start node</label>
+      <input type="text" id="start-node" value="A" maxlength="30">
+
+      <label for="graph-input">Graph in JSON format</label>
+      <textarea id="graph-input" spellcheck="false" rows="16">{
+  "A": {"B": 4, "C": 2},
+  "B": {"D": 5, "E": 1},
+  "C": {"B": 1, "D": 7, "E": 3},
+  "D": {"F": 2},
+  "E": {"F": 4},
+  "F": {}
+}</textarea>
+      <p class="hint">Format: each key is a node; each nested key is a neighbor and its value is the edge weight.</p>
+
+      <button id="run-btn" type="button">Initialize and run</button>
+      <p id="error-message" class="error" role="alert" aria-live="polite"></p>
+    </section>
+
+    <section class="viz-area" aria-label="Algorithm visualization">
+      <div id="cy" class="cy-container"></div>
+
+      <div class="legend" aria-label="Graph legend">
+        <span><i class="dot current"></i>Current</span>
+        <span><i class="dot visited"></i>Visited/finalized</span>
+        <span><i class="dot frontier"></i>Frontier</span>
+        <span><i class="line active"></i>Relaxed edge</span>
+      </div>
+
+      <div class="step-controls">
+        <button id="prev-btn" type="button" disabled>Previous step</button>
+        <span id="step-counter">Step 0 / 0</span>
+        <button id="next-btn" type="button" disabled>Next step</button>
+      </div>
+
+      <div id="step-description" class="step-description">Initialize the graph to begin.</div>
+
+      <div class="calculation-table">
+        <h2>Calculation log and state</h2>
+        <div class="table-wrapper">
+          <table id="state-table">
+            <thead>
+              <tr>
+                <th>Step</th><th>Action</th><th>Current node</th><th>State</th>
+              </tr>
+            </thead>
+            <tbody id="table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
